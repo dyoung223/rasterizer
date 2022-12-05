@@ -252,58 +252,13 @@ if(MOD_FSM == 0) begin // Using baseline FSM
 
     always_comb begin
         // START CODE HERE
-	next_up_samp_R14S[1] = sample_R14S[1] + {subSample_RnnnnU, {RADIX-3{1'b0}}};
-	next_rt_samp_R14S[0] = sample_R14S[0] + {subSample_RnnnnU, {RADIX-3{1'b0}}};
-	/*
-        case(subSample_RnnnnU)
-            4'b1000:
-            begin
-                next_up_samp_R14S[1] = sample_R14S[1] + {4'b1000, {RADIX-3{1'b0}}};
-                next_rt_samp_R14S[0] = sample_R14S[0] + {4'b1000, {RADIX-3{1'b0}}};
-            end
-            4'b0100:
-            begin
-                next_up_samp_R14S[1] = sample_R14S[1] + {4'b0100, {RADIX-3{1'b0}}};
-                next_rt_samp_R14S[0] = sample_R14S[0] + {4'b0100, {RADIX-3{1'b0}}};
-            end
-            4'b0010:
-            begin
-                next_up_samp_R14S[1] = sample_R14S[1] + {4'b0010, {RADIX-3{1'b0}}};
-                next_rt_samp_R14S[0] = sample_R14S[0] + {4'b0010, {RADIX-3{1'b0}}};
-            end
-            4'b0001:
-            begin
-                next_up_samp_R14S[1] = sample_R14S[1] + {4'b0001, {RADIX-3{1'b0}}};
-                next_rt_samp_R14S[0] = sample_R14S[0] + {4'b0001, {RADIX-3{1'b0}}};
-            end
-            default:
-            begin
-                next_up_samp_R14S[1] = sample_R14S[1] + {4'b1000, {RADIX-3{1'b0}}};
-                next_rt_samp_R14S[0] = sample_R14S[0] + {4'b1000, {RADIX-3{1'b0}}};
-            end
-        endcase
-	*/
+        next_up_samp_R14S[1] = sample_R14S[1] + {subSample_RnnnnU, {RADIX-3{1'b0}}};
+        next_rt_samp_R14S[0] = sample_R14S[0] + {subSample_RnnnnU, {RADIX-3{1'b0}}};
         next_up_samp_R14S[0] = box_R14S[0][0]; //sample_R14S[0]; //Always assign to far left column
-
         next_rt_samp_R14S[1] = sample_R14S[1];
-	
-	at_right_edg_R14H = sample_R14S[0] >= box_R14S[1][0];
-	at_top_edg_R14H = sample_R14S[1] >= box_R14S[1][1];
-        /*if(sample_R14S[0] >= box_R14S[1][0]) //You have reached far right limit
-            at_right_edg_R14H = 1'b1;
-        else
-            at_right_edg_R14H = 1'b0;
-
-        if(sample_R14S[1] >= box_R14S[1][1]) //You have reached upper limit
-            at_top_edg_R14H = 1'b1;
-        else
-            at_top_edg_R14H = 1'b0;
-	*/
+        at_right_edg_R14H = sample_R14S[0] >= box_R14S[1][0];
+        at_top_edg_R14H = sample_R14S[1] >= box_R14S[1][1];
         at_end_box_R14H = at_right_edg_R14H && at_top_edg_R14H;
-        // if(sample_R14S[0] == box_R13S[1][0] && sample_R14S[1] == box_R13S[1][1]) //You reached end
-        //     at_end_box_R14H = 1'b1;
-        // else
-        //     at_end_box_R14H = 1'b0;
         // END CODE HERE
     end
 
@@ -330,9 +285,8 @@ if(MOD_FSM == 0) begin // Using baseline FSM
                         next_color_R14U = color_R13U;
                         next_validSamp_R14H = 1'b0;
                         next_box_R14S = box_R14S;
-                        next_sample_R14S = box_R14S[0];
-			//next_sample_R14S[0] = box_R14S[0][0];
-                        //next_sample_R14S[1] = box_R14S[0][1];
+                        next_sample_R14S[0] = box_R14S[0][0];
+                        next_sample_R14S[1] = box_R14S[0][1];
                         next_state_R14H = WAIT_STATE;
                     end
                 default:                        //if not at end of box just keep iterating
@@ -346,17 +300,15 @@ if(MOD_FSM == 0) begin // Using baseline FSM
                         case(at_right_edg_R14H) //check if at right edge
                             1'b1:               //if at right edge move up
                             begin
-                                next_sample_R14S = next_up_samp_R14S;
-				//next_sample_R14S[0] = next_up_samp_R14S[0];
-                                //next_sample_R14S[1] = next_up_samp_R14S[1];
+                                next_sample_R14S[0] = next_up_samp_R14S[0];
+                                next_sample_R14S[1] = next_up_samp_R14S[1];
                             end
                             default:            //if not at right edge just move right
                             begin
                                 //technically could make another case for the upper
                                 //limit check
-                                next_sample_R14S = next_rt_samp_R14S;
-				//next_sample_R14S[0] = next_rt_samp_R14S[0];
-                                //next_sample_R14S[1] = next_rt_samp_R14S[1];
+                                next_sample_R14S[0] = next_rt_samp_R14S[0];
+                                next_sample_R14S[1] = next_rt_samp_R14S[1];
                             end
                         endcase
                     end
@@ -368,13 +320,12 @@ if(MOD_FSM == 0) begin // Using baseline FSM
                 1'b1:
                     begin
                     next_state_R14H = TEST_STATE;
-                    next_halt_RnnnnL = 1'b0;
+                    next_halt_RnnnnL = 1'b0; //allow new value
                     next_tri_R14S = tri_R13S;
                     next_color_R14U = color_R13U;
                     next_validSamp_R14H = 1'b1;
-                    next_sample_R14S = box_R13S[0];
-		    //next_sample_R14S[0] = box_R13S[0][0];
-                    //next_sample_R14S[1] = box_R13S[0][1];
+                    next_sample_R14S[0] = box_R13S[0][0];
+                    next_sample_R14S[1] = box_R13S[0][1];
                     next_box_R14S = box_R13S;
                     end
                 default:
@@ -384,14 +335,11 @@ if(MOD_FSM == 0) begin // Using baseline FSM
                     next_tri_R14S = tri_R14S;
                     next_color_R14U = color_R14U;
                     next_validSamp_R14H = 1'b0;
-                    //next_sample_R14S = sample_R14S[0];
-		    next_sample_R14S[0] = sample_R14S[0][0];
-                    next_sample_R14S[1] = sample_R14S[0][1];
+                    next_sample_R14S[0] = sample_R14S[0];
+                    next_sample_R14S[1] = sample_R14S[1];
                     next_box_R14S = box_R14S;
                     end
                 endcase
-
-
         endcase
     
         // END CODE HERE
@@ -413,6 +361,7 @@ if(MOD_FSM == 0) begin // Using baseline FSM
     assert property ( @(posedge clk) (state_R14H == TEST_STATE && at_end_box_R14H == 1'b1 |=> state_R14H == WAIT_STATE));
     //3
     assert property ( @(posedge clk) (state_R14H == TEST_STATE && at_end_box_R14H == 1'b0 |=> state_R14H == TEST_STATE));
+    assert property ( @(posedge clk) (state_R14H == WAIT_STATE && validTri_R13H == 1'b0  |=> state_R14H == WAIT_STATE));
 
     // END CODE HERE
     // Assertion ends

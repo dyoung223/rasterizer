@@ -103,44 +103,23 @@ module sampletest
     // hit_valid_R16H is high if validSamp_R16H && sample inside triangle (with back face culling)
     // Consider the following steps:
     
-    logic left0, left1, left2;
-    // START CODE HERE
-    always_comb
-    begin
-        
-	tri_shift_R16S[0][0] = tri_R16S[0][0] - sample_R16S[0];
-        tri_shift_R16S[0][1] = tri_R16S[0][1] - sample_R16S[1];
-        tri_shift_R16S[1][0] = tri_R16S[1][0] - sample_R16S[0];
-        tri_shift_R16S[1][1] = tri_R16S[1][1] - sample_R16S[1];
-        tri_shift_R16S[2][0] = tri_R16S[2][0] - sample_R16S[0];
-        tri_shift_R16S[2][1] = tri_R16S[2][1] - sample_R16S[1];
 
-	/*
-        tri_shift_R16S[0] = tri_R16S[0] - sample_R16S;
-	tri_shift_R16S[1] = tri_R16S[1] - sample_R16S;
-	tri_shift_R16S[2] = tri_R16S[2] - sample_R16S;
-       */	
+    // START CODE HERE
+    // genvar i;
+    always_comb begin
+        for(int i = 0; i < 3; i = i + 1) begin
+            for(int j = 0; j < 2; j = j + 1) begin
+                tri_shift_R16S[i][j] = tri_R16S[i][j] - sample_R16S[j];
+            end
+        end
     // (2) Organize edges (form three edges for triangles)
     // (3) Calculate distance x_1 * y_2 - x_2 * y_1
-    
-    
         dist_lg_R16S[0] = tri_shift_R16S[0][0] * tri_shift_R16S[1][1] - tri_shift_R16S[1][0] * tri_shift_R16S[0][1];
         dist_lg_R16S[1] = tri_shift_R16S[1][0] * tri_shift_R16S[2][1] - tri_shift_R16S[2][0] * tri_shift_R16S[1][1];
         dist_lg_R16S[2] = tri_shift_R16S[2][0] * tri_shift_R16S[0][1] - tri_shift_R16S[0][0] * tri_shift_R16S[2][1];
-    
     // (4) Check distance and assign hit_valid_R16H.
-    
-    	left0 = dist_lg_R16S[0] <= 0;
-	left1 = dist_lg_R16S[1] < 0;
-	left2 = dist_lg_R16S[2] <= 0;
-        //hit_valid_R16H = ((dist_lg_R16S[0] <= $signed(1'b0)) && (dist_lg_R16S[1] < $signed(1'b0)) && (dist_lg_R16S[2] <= $signed(1'b0)));
-	//hit_valid_R16H = ((dist_lg_R16S[0]) <= 0 && (dist_lg_R16S[1] < 0) && (dist_lg_R16S[2] <= 0));
-	hit_valid_R16H = left0 && left1 && left2;
+        hit_valid_R16H = ((dist_lg_R16S[0] <= 0) && (dist_lg_R16S[1] < 0) && (dist_lg_R16S[2] <= 0) && validSamp_R16H);
     end
-    // assert property( @(posedge clk) (dist_lg_R16S[0] <= 1'b0));
-    // assert property( @(posedge clk) (dist_lg_R16S[1] <= 1'b0));
-    // assert property( @(posedge clk) (dist_lg_R16S[2] <= 1'b0));
-
     // END CODE HERE
 
     //Assertions to help debug

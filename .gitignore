@@ -1,0 +1,5 @@
+rasterizer_gold
+*.[oa]
+simv/
+csrc/
+*.temp

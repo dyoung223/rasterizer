@@ -225,12 +225,7 @@ module bbox
             bbox_sel_R10H[0][1] = 3'b001;
 
     end
-    // always_comb begin
-    //     bbox_sel_R10H[0][0] = (tri_R10S[0][0] < tri_R10S[1][0] && tri_R10S[0][0] < tri_R10S[2][0]) ? 3'b001 : (tri_R10S[1][0] < tri_R10S[2][0]) ? 3'b010 : 3'b100;
-    //     bbox_sel_R10H[0][1] = (tri_R10S[0][1] < tri_R10S[1][1] && tri_R10S[0][1] < tri_R10S[2][1]) ? 3'b001 : (tri_R10S[1][1] < tri_R10S[2][1]) ? 3'b010 : 3'b100;
-    //     bbox_sel_R10H[1][0] = (tri_R10S[0][0] > tri_R10S[1][0] && tri_R10S[0][0] > tri_R10S[2][0]) ? 3'b001 : (tri_R10S[1][0] > tri_R10S[2][0]) ? 3'b010 : 3'b100;
-    //     bbox_sel_R10H[1][1] = (tri_R10S[0][1] > tri_R10S[1][0] && tri_R10S[0][1] > tri_R10S[2][1]) ? 3'b001 : (tri_R10S[1][1] > tri_R10S[2][1]) ? 3'b010 : 3'b100;
-    // end
+    
     // Try declaring an always_comb block to assign values to box_R10S
     always_comb begin
         case(bbox_sel_R10H[0][0])
@@ -310,9 +305,8 @@ for(genvar i = 0; i < 2; i = i + 1) begin
                 = box_R10S[i][j][SIGFIG-1:RADIX];
 
             //////// ASSIGN FRACTIONAL PORTION
-            // START CODE HERE    //THIS IMPLEMENTATION COULD CAUSE TIMING
-	    // ISSUES
-             case(subSample_RnnnnU) 
+            // START CODE HERE
+            case(subSample_RnnnnU)
                 4'b1000: rounded_box_R10S[i][j][RADIX-1:0] = box_R10S[i][j][RADIX-1:0] & {3'b000, {RADIX-3{1'b0}}};
                 4'b0100: rounded_box_R10S[i][j][RADIX-1:0] = box_R10S[i][j][RADIX-1:0] & {3'b100, {RADIX-3{1'b0}}};
                 4'b0010: rounded_box_R10S[i][j][RADIX-1:0] = box_R10S[i][j][RADIX-1:0] & {3'b110, {RADIX-3{1'b0}}};
@@ -325,7 +319,7 @@ for(genvar i = 0; i < 2; i = i + 1) begin
 
     end
 end
-// $display("value: %h", rounded_box_R10S[1][1]);
+
 endgenerate
 
     //Assertion to help you debug errors in rounding
@@ -349,45 +343,33 @@ endgenerate
 
         //////// ASSIGN "out_box_R10S" and "outvalid_R10H"
         // START CODE HERE
-        //case(halt_RnnnnL)
-            //1'b1:
-            //begin
-                if(rounded_box_R10S[0][0] <= rounded_box_R10S[1][0] && rounded_box_R10S[0][1] <= rounded_box_R10S[1][1] && validTri_R10H && rounded_box_R10S[1][1] >= 0 && rounded_box_R10S[1][0] >= 0)
-                    outvalid_R10H = 1'b1;
-                else
-                    outvalid_R10H = 1'b0;
 
-                if(rounded_box_R10S[0][0] < 0)
-                    out_box_R10S[0][0] = {SIGFIG{1'b0}};
-                else
-                    out_box_R10S[0][0] = rounded_box_R10S[0][0];
+        if(rounded_box_R10S[0][0] <= rounded_box_R10S[1][0] && rounded_box_R10S[0][1] <= rounded_box_R10S[1][1] && validTri_R10H && rounded_box_R10S[1][1] >= 0 && rounded_box_R10S[1][0] >= 0)
+            outvalid_R10H = 1'b1;
+        else
+            outvalid_R10H = 1'b0;
 
-                if(rounded_box_R10S[0][1] < 0)
-                    out_box_R10S[0][1] = {SIGFIG{1'b0}};
-                else
-                    out_box_R10S[0][1] = rounded_box_R10S[0][1];
+        if(rounded_box_R10S[0][0] < 0)
+            out_box_R10S[0][0] = {SIGFIG{1'b0}};
+        else
+            out_box_R10S[0][0] = rounded_box_R10S[0][0];
 
-                if(rounded_box_R10S[1][0] > screen_RnnnnS[0])
-                    out_box_R10S[1][0] = screen_RnnnnS[0];
-                else
-                    out_box_R10S[1][0] = rounded_box_R10S[1][0];
+        if(rounded_box_R10S[0][1] < 0)
+            out_box_R10S[0][1] = {SIGFIG{1'b0}};
+        else
+            out_box_R10S[0][1] = rounded_box_R10S[0][1];
 
-                if(rounded_box_R10S[1][1] > screen_RnnnnS[1])
-                    out_box_R10S[1][1] = screen_RnnnnS[1];
-                else
-                    out_box_R10S[1][1] = rounded_box_R10S[1][1];
+        if(rounded_box_R10S[1][0] > screen_RnnnnS[0])
+            out_box_R10S[1][0] = screen_RnnnnS[0];
+        else
+            out_box_R10S[1][0] = rounded_box_R10S[1][0];
 
-	    	// assign out_box_R10S[0][0] = out_box_R10S[0][0];
-                // assign out_box_R10S[0][1] = out_box_R10S[0][1];
-                // assign out_box_R10S[1][0] = out_box_R10S[1][0];
-                // assign out_box_R10S[1][1] = out_box_R10S[1][1];
-
-            
-            //default: outvalid_R10H = 1'b0;
-        //endcase
-        // END CODE HERE
-
+        if(rounded_box_R10S[1][1] > screen_RnnnnS[1])
+            out_box_R10S[1][1] = screen_RnnnnS[1];
+        else
+            out_box_R10S[1][1] = rounded_box_R10S[1][1];
     end
+        // END CODE HERE
 
     //Assertion for checking if outvalid_R10H has been assigned properly
     assert property( @(posedge clk) (outvalid_R10H |-> out_box_R10S[1][0] <= screen_RnnnnS[0] ));
