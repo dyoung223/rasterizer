@@ -83,7 +83,8 @@ module sampletest
 
     localparam EDGES = (VERTS == 3) ? 3 : 5;
     localparam SHORTSF = SIGFIG;
-    localparam MROUND = (2 * SHORTSF) - RADIX;
+    localparam MROUND = (2 * SHORTSF) - 16; //RADIX
+    localparam SHORTSF_LOW = 23; //SIGFIG;//SIGFIG-RADIX;
 
     // output for retiming registers
     logic signed [SIGFIG-1:0]       hit_R18S_retime[AXIS-1:0];   // Hit Location
@@ -94,11 +95,11 @@ module sampletest
     // Signals in Access Order
     logic signed [SIGFIG-1:0]       tri_shift_R16S[VERTS-1:0][1:0]; // triangle after coordinate shift
     logic signed [SIGFIG-1:0]       edge_R16S[EDGES-1:0][1:0][1:0]; // Edges
-    logic signed [(2*SHORTSF)-1:0]  dist_lg_R16S[EDGES-1:0]; // Result of x_1 * y_2 - x_2 * y_1
+    logic signed [MROUND-1:0]  dist_lg_R16S[EDGES-1:0]; // Result of x_1 * y_2 - x_2 * y_1
     logic                           hit_valid_R16H ; // Output (YOUR JOB!)
     logic signed [SIGFIG-1:0]       hit_R16S[AXIS-1:0]; // Sample position
     // Signals in Access Order
-
+    
     // Your job is to produce the value for hit_valid_R16H signal, which indicates whether a sample lies inside the triangle.
     // hit_valid_R16H is high if validSamp_R16H && sample inside triangle (with back face culling)
     // Consider the following steps:
@@ -115,33 +116,19 @@ module sampletest
         tri_shift_R16S[2][0] = tri_R16S[2][0] - sample_R16S[0];
         tri_shift_R16S[2][1] = tri_R16S[2][1] - sample_R16S[1];
 
-	/*
-        tri_shift_R16S[0] = tri_R16S[0] - sample_R16S;
-	tri_shift_R16S[1] = tri_R16S[1] - sample_R16S;
-	tri_shift_R16S[2] = tri_R16S[2] - sample_R16S;
-       */	
     // (2) Organize edges (form three edges for triangles)
     // (3) Calculate distance x_1 * y_2 - x_2 * y_1
-    
-    
         dist_lg_R16S[0] = tri_shift_R16S[0][0] * tri_shift_R16S[1][1] - tri_shift_R16S[1][0] * tri_shift_R16S[0][1];
         dist_lg_R16S[1] = tri_shift_R16S[1][0] * tri_shift_R16S[2][1] - tri_shift_R16S[2][0] * tri_shift_R16S[1][1];
         dist_lg_R16S[2] = tri_shift_R16S[2][0] * tri_shift_R16S[0][1] - tri_shift_R16S[0][0] * tri_shift_R16S[2][1];
-    
     // (4) Check distance and assign hit_valid_R16H.
-    
-    	left0 = dist_lg_R16S[0] <= 0;
-	left1 = dist_lg_R16S[1] < 0;
-	left2 = dist_lg_R16S[2] <= 0;
-        //hit_valid_R16H = ((dist_lg_R16S[0] <= $signed(1'b0)) && (dist_lg_R16S[1] < $signed(1'b0)) && (dist_lg_R16S[2] <= $signed(1'b0)));
-	//hit_valid_R16H = ((dist_lg_R16S[0]) <= 0 && (dist_lg_R16S[1] < 0) && (dist_lg_R16S[2] <= 0));
-	hit_valid_R16H = left0 && left1 && left2;
+       	//left0 = dist_lg_R16S[0] <= 0;
+	//left1 = dist_lg_R16S[1] < 0;
+	//left2 = dist_lg_R16S[2] <= 0;
+       	hit_valid_R16H = ((dist_lg_R16S[0]) <= 0 && (dist_lg_R16S[1] < 0) && (dist_lg_R16S[2] <= 0));
+	//hit_valid_R16H = left0 && left1 && left2;
     end
-    // assert property( @(posedge clk) (dist_lg_R16S[0] <= 1'b0));
-    // assert property( @(posedge clk) (dist_lg_R16S[1] <= 1'b0));
-    // assert property( @(posedge clk) (dist_lg_R16S[2] <= 1'b0));
-
-    // END CODE HERE
+       // END CODE HERE
 
     //Assertions to help debug
     //Check if correct inequalities have been used

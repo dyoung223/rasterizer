@@ -1,0 +1,24 @@
+1.2
+0
+  slack (MET)                                                      0.0007
+Total Dynamic Power    =  22.3764 mW  (100%)
+                 Internal         Switching           Leakage            Total
+Total          1.9407e+04 uW     2.9697e+03 uW     6.2882e+05 nW     2.3005e+04 uW
+Cell Leakage Power     = 628.8237 uW
+Total cell area:                 32535.524551
+1.2
+0
+  slack (MET)                                                      0.0010
+Total Dynamic Power    =  23.0680 mW  (100%)
+                 Internal         Switching           Leakage            Total
+Total          1.9883e+04 uW     3.1853e+03 uW     6.5707e+05 nW     2.3726e+04 uW
+Cell Leakage Power     = 657.0734 uW
+Total cell area:                 33884.942560
+1.2
+0
+  slack (MET)                                                      0.0001
+Total Dynamic Power    =  19.4205 mW  (100%)
+                 Internal         Switching           Leakage            Total
+Total          1.6002e+04 uW     3.4185e+03 uW     6.3190e+05 nW     2.0053e+04 uW
+Cell Leakage Power     = 631.9038 uW
+Total cell area:                 32527.012517

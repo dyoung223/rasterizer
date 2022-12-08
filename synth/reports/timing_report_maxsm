@@ -1,0 +1,66 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : rast
+Version: M-2016.12-SP2
+Date   : Wed Dec  7 23:13:54 2022
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: R_29 (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: sampletest/lte_x_13/clk_r_REG18_S10
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  rast               1K_hvratio_1_4        NangateOpenCellLibrary
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                 0.0000     0.0000
+  clock network delay (ideal)                           0.0000     0.0000
+  R_29/CK (DFFS_X1)                                     0.0000 #   0.0000 r
+  R_29/QN (DFFS_X1)                                     0.0898     0.0898 r
+  U1229/Z (CLKBUF_X2)                                   0.1009     0.1907 r
+  U3644/ZN (XNOR2_X1)                                   0.0980     0.2887 r
+  U3645/ZN (OAI22_X1)                                   0.0452     0.3339 f
+  U3728/CO (FA_X1)                                      0.1035     0.4373 f
+  U3726/S (FA_X1)                                       0.1315     0.5689 r
+  U3741/S (FA_X1)                                       0.1107     0.6796 f
+  U3736/ZN (NAND2_X1)                                   0.0366     0.7162 r
+  U3737/ZN (INV_X1)                                     0.0220     0.7382 f
+  U3738/ZN (AOI21_X1)                                   0.0512     0.7894 r
+  U3739/ZN (OAI21_X1)                                   0.0401     0.8295 f
+  U3745/ZN (AOI21_X1)                                   0.0479     0.8775 r
+  U1868/ZN (OAI21_X1)                                   0.0349     0.9124 f
+  U1867/ZN (NAND2_X1)                                   0.0291     0.9415 r
+  U1794/ZN (AND3_X2)                                    0.0551     0.9966 r
+  U1413/ZN (OAI21_X1)                                   0.0302     1.0268 f
+  U3876/ZN (INV_X1)                                     0.0347     1.0615 r
+  U9365/ZN (OAI21_X1)                                   0.0325     1.0940 f
+  U9367/ZN (XNOR2_X1)                                   0.0558     1.1499 f
+  sampletest/lte_x_13/clk_r_REG18_S10/D (DFFR_X1)       0.0079     1.1578 f
+  data arrival time                                                1.1578
+
+  clock clk (rise edge)                                 1.2000     1.2000
+  clock network delay (ideal)                           0.0000     1.2000
+  sampletest/lte_x_13/clk_r_REG18_S10/CK (DFFR_X1)      0.0000     1.2000 r
+  library setup time                                   -0.0421     1.1579
+  data required time                                               1.1579
+  --------------------------------------------------------------------------
+  data required time                                               1.1579
+  data arrival time                                               -1.1578
+  --------------------------------------------------------------------------
+  slack (MET)                                                      0.0001
+
+
+1
