@@ -185,6 +185,29 @@ module bbox
     //  DECLARE ANY OTHER SIGNALS YOU NEED
     logic xab, xac, xbc;
     logic yab, yac, ybc;
+    logic signed[SIGFIG-1:0] tri_compare[3:0];
+    logic signed[(2*SIGFIG)-16-1:0] mult_compare[1:0];
+    logic backface;
+
+    always_comb
+    begin
+	tri_compare[0] = tri_R10S[1][0] - tri_R10S[0][0];
+	tri_compare[1] = tri_R10S[2][1] - tri_R10S[1][1];
+	tri_compare[2] = tri_R10S[2][0] - tri_R10S[1][0];
+	tri_compare[3] = tri_R10S[1][1] - tri_R10S[0][1];
+
+	mult_compare[0] = tri_compare[0] * tri_compare[1];
+	mult_compare[1] = tri_compare[2] * tri_compare[3];
+
+	if (mult_compare[0] - mult_compare[1] > 0)
+	    backface = 1'b1;
+    	else
+	    backface = 1'b0;
+    end
+
+
+
+
     always_comb
     begin
         xab = tri_R10S[0][0] > tri_R10S[1][0];
@@ -352,7 +375,7 @@ endgenerate
         //case(halt_RnnnnL)
             //1'b1:
             //begin
-                if(rounded_box_R10S[0][0] <= rounded_box_R10S[1][0] && rounded_box_R10S[0][1] <= rounded_box_R10S[1][1] && validTri_R10H && rounded_box_R10S[1][1] >= 0 && rounded_box_R10S[1][0] >= 0)
+                if(rounded_box_R10S[0][0] <= rounded_box_R10S[1][0] && rounded_box_R10S[0][1] <= rounded_box_R10S[1][1] && validTri_R10H && rounded_box_R10S[1][1] >= 0 && rounded_box_R10S[1][0] >= 0 && backface == 1'b0)
                     outvalid_R10H = 1'b1;
                 else
                     outvalid_R10H = 1'b0;
