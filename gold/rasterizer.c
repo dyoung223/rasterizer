@@ -98,9 +98,20 @@ BoundingBox get_bounding_box(Triangle triangle, Screen screen, Config config)
   if(bbox.upper_right.y > screen.height){
     bbox.upper_right.y = screen.height;
   }
- 
+
+  int tri_compare[4];
+  int mult_compare[2];
+  bool backface;
+  tri_compare[0]=triangle.v[1].x - triangle.v[0].x;
+  tri_compare[1]=triangle.v[2].y - triangle.v[1].y;
+  tri_compare[2]=triangle.v[2].x - triangle.v[1].x;
+  tri_compare[3]=triangle.v[1].y - triangle.v[0].y;
+  mult_compare[0] = tri_compare[0] * tri_compare[1];
+	mult_compare[1] = tri_compare[2] * tri_compare[3];
+  backface=mult_compare[0]>mult_compare[1];
   // check if bbox is valid
-  if(bbox.lower_left.x <= bbox.upper_right.x && bbox.lower_left.y <= bbox.upper_right.y){
+  
+  if(bbox.lower_left.x <= bbox.upper_right.x && bbox.lower_left.y <= bbox.upper_right.y && !backface){
     bbox.valid = true;
   }else{
     bbox.valid = false;
