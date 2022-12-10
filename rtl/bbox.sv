@@ -185,10 +185,10 @@ module bbox
     //  DECLARE ANY OTHER SIGNALS YOU NEED
     logic xab, xac, xbc;
     logic yab, yac, ybc;
-    logic signed[SIGFIG-1:0] tri_compare[3:0];
+    logic signed[(SIGFIG-7)-1:0] tri_compare[3:0];
     logic signed[(2*SIGFIG)-16-1:0] mult_compare[1:0];
     logic backface;
-    logic new_halt;    
+    //logic new_halt;    
     always_comb
     begin
 	tri_compare[0] = tri_R10S[1][0] - tri_R10S[0][0];
@@ -204,11 +204,11 @@ module bbox
     	else
 	    backface = 1'b0;
     	
-   	 new_halt = !validTri_R13H || halt_RnnnnL;
+   	// new_halt = !validTri_R13H || halt_RnnnnL;
 	
     end
 
-
+    
 
 
     always_comb
@@ -432,7 +432,7 @@ endgenerate
     (
         .clk    (clk                ),
         .reset  (rst                ),
-        .en     (new_halt         ),
+        .en     (halt_RnnnnL),//nnew_halt         ),
         .in     (tri_R10S          ),
         .out    (tri_R13S_retime   )
     );
@@ -447,7 +447,7 @@ endgenerate
     (
         .clk    (clk                ),
         .reset  (rst                ),
-        .en     (new_halt            ),
+        .en     (halt_RnnnnL),//nnew_halt            ),
         .in     (color_R10U         ),
         .out    (color_R13U_retime  )
     );
@@ -463,7 +463,7 @@ endgenerate
     (
         .clk    (clk            ),
         .reset  (rst            ),
-        .en     (new_halt        ),
+        .en     (halt_RnnnnL),//nnew_halt        ),
         .in     (out_box_R10S   ),
         .out    (box_R13S_retime)
     );
@@ -477,7 +477,7 @@ endgenerate
     (
         .clk    (clk                    ),
         .reset  (rst                    ),
-        .en     (new_halt                ),
+        .en     (halt_RnnnnL),//nnew_halt                ),
         .in     (outvalid_R10H          ),
         .out    (validTri_R13H_retime   )
     );
@@ -495,7 +495,7 @@ endgenerate
     (
         .clk    (clk                ),
         .reset  (rst                ),
-        .en     (new_halt            ),
+        .en     (halt_RnnnnL),//nnew_halt            ),
         .in     (tri_R13S_retime    ),
         .out    (tri_R13S           )
     );
@@ -510,7 +510,7 @@ endgenerate
     (
         .clk    (clk                ),
         .reset  (rst                ),
-        .en     (new_halt            ),
+        .en     (halt_RnnnnL),//nnew_halt            ),
         .in     (color_R13U_retime  ),
         .out    (color_R13U         )
     );
@@ -526,7 +526,7 @@ endgenerate
     (
         .clk    (clk            ),
         .reset  (rst            ),
-        .en     (new_halt       ),
+        .en     (halt_RnnnnL),//nnew_halt       ),
         .in     (box_R13S_retime),
         .out    (box_R13S       )
     );
@@ -540,7 +540,7 @@ endgenerate
     (
         .clk    (clk                    ),
         .reset  (rst                    ),
-        .en     (new_halt                ),
+        .en     (halt_RnnnnL),//new_halt                ),
         .in     (validTri_R13H_retime   ),
         .out    (validTri_R13H          )
     );

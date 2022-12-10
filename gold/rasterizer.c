@@ -112,6 +112,7 @@ BoundingBox get_bounding_box(Triangle triangle, Screen screen, Config config)
   // check if bbox is valid
   
   if(bbox.lower_left.x <= bbox.upper_right.x && bbox.lower_left.y <= bbox.upper_right.y && !backface){
+  //if(bbox.lower_left.x <= bbox.upper_right.x && bbox.lower_left.y <= bbox.upper_right.y){
     bbox.valid = true;
   }else{
     bbox.valid = false;

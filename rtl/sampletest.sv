@@ -83,8 +83,8 @@ module sampletest
 
     localparam EDGES = (VERTS == 3) ? 3 : 5;
     localparam SHORTSF = SIGFIG;
-    localparam MROUND = (2 * SHORTSF) - 16; //RADIX
-    localparam SHORTSF_LOW = 23; //SIGFIG;//SIGFIG-RADIX;
+    localparam MROUND = (2 * SHORTSF) - 16;//RADIX
+    localparam SHORTSF_LOW = SIGFIG-7; //SIGFIG;//SIGFIG-RADIX;
 
     // output for retiming registers
     logic signed [SIGFIG-1:0]       hit_R18S_retime[AXIS-1:0];   // Hit Location
@@ -93,8 +93,8 @@ module sampletest
     // output for retiming registers
 
     // Signals in Access Order
-    logic signed [SIGFIG-1:0]       tri_shift_R16S[VERTS-1:0][1:0]; // triangle after coordinate shift
-    logic signed [SIGFIG-1:0]       edge_R16S[EDGES-1:0][1:0][1:0]; // Edges
+    logic signed [SHORTSF_LOW-1:0]       tri_shift_R16S[VERTS-1:0][1:0]; // triangle after coordinate shift
+    //logic signed [SIGFIG-1:0]       edge_R16S[EDGES-1:0][1:0][1:0]; // Edges
     logic signed [MROUND-1:0]  dist_lg_R16S[EDGES-1:0]; // Result of x_1 * y_2 - x_2 * y_1
     logic                           hit_valid_R16H ; // Output (YOUR JOB!)
     logic signed [SIGFIG-1:0]       hit_R16S[AXIS-1:0]; // Sample position

@@ -139,7 +139,8 @@ set_dont_touch_network $RST
 #set power analysis
 #set_power_prediction
 set_optimize_registers true -design ${DESIGN_TARGET}
-compile_ultra -retime -timing_high_effort_script -gate_clock
+ungroup -all -flatten
+compile_ultra -timing_high_effort_script -gate_clock -retime 
 ##########################
 # Analyze Design 
 ##########################

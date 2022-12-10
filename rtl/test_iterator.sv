@@ -337,7 +337,7 @@ if(MOD_FSM == 0) begin // Using baseline FSM
                     end
                 default:                        //if not at end of box just keep iterating
                     begin
-                        next_halt_RnnnnL = 1'b0; //hold bbox
+			next_halt_RnnnnL = 1'b0; //hold bbox
                         next_validSamp_R14H = 1'b1;
                         next_box_R14S = box_R14S;
                         next_state_R14H = TEST_STATE;
